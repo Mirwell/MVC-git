@@ -20,22 +20,20 @@ class Router
     {
         // Получить строку запроса
         
-        $uriPattern = $this->getURI();
-        echo $uriPattern;
-
+        $uri = $this->getURI();
         // Проверить наличие такого запроса в routes.php
         foreach($this->routes as $uriPattern => $path){
-            if(preg_match('~$uriPattern~', $uriPattern)){
+            if(preg_match("~$uriPattern~", $uri)){
                 $segments = explode('/', $path);
-
+                
                 $controllerName = array_shift($segments).'Controller';
+                
                 $controllerName = ucfirst($controllerName);
 
                 $actionName = 'action' . ucfirst(array_shift($segments));
 
-                $controllerFile = ROOT . '/controllerts' . 
-                        $controllerName . '.php';
-                
+                $controllerFile = ROOT . '/controllers/' . $controllerName . '.php';
+                echo $controllerFile;
                 if(file_exists($controllerFile)){
                     include_once($controllerFile);
                 }
