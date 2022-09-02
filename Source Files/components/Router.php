@@ -15,7 +15,7 @@ class Router
             return trim($_SERVER['REQUEST_URI'],'/');
         }
     }
-
+    
     public function run()
     {
         // Получить строку запроса
@@ -24,30 +24,22 @@ class Router
         // Проверить наличие такого запроса в routes.php
         foreach($this->routes as $uriPattern => $path){
             if(preg_match("~$uriPattern~", $uri)){
-                $segments = explode('/', $path);
-                
-                $controllerName = array_shift($segments).'Controller';
-                
-                $controllerName = ucfirst($controllerName);
-
-                $actionName = 'action' . ucfirst(array_shift($segments));
-
-                $controllerFile = ROOT . '/controllers/' . $controllerName . '.php';
-                echo $controllerFile;
+                $controllerName = $path['controller'];
+                $actionName = $path['action'];
+                $controllerFile = ROOT . '/controllers/' . $path['controller'] . '.php';
                 if(file_exists($controllerFile)){
                     include_once($controllerFile);
+                    
                 }
-
                 $controllerObject = new $controllerName;
                 $result = $controllerObject -> $actionName();
                 if ($result != null){
                     break;
                 }
-
-
-
-
             }
+
+
+            
             
         }
         // Если, есть совпадение, то определить 
