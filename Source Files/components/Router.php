@@ -20,11 +20,38 @@ class Router
     {
         // Получить строку запроса
         
-        $uri = $this->getURI();
-        echo $uri;
+        $uriPattern = $this->getURI();
+        echo $uriPattern;
 
         // Проверить наличие такого запроса в routes.php
+        foreach($this->routes as $uriPattern => $path){
+            if(preg_match('~$uriPattern~', $uriPattern)){
+                $segments = explode('/', $path);
 
+                $controllerName = array_shift($segments).'Controller';
+                $controllerName = ucfirst($controllerName);
+
+                $actionName = 'action' . ucfirst(array_shift($segments));
+
+                $controllerFile = ROOT . '/controllerts' . 
+                        $controllerName . '.php';
+                
+                if(file_exists($controllerFile)){
+                    include_once($controllerFile);
+                }
+
+                $controllerObject = new $controllerName;
+                $result = $controllerObject -> $actionName();
+                if ($result != null){
+                    break;
+                }
+
+
+
+
+            }
+            
+        }
         // Если, есть совпадение, то определить 
         // какой контроллер и action обрабатывают запрос
 
