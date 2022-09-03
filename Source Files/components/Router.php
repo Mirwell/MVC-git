@@ -19,8 +19,8 @@ class Router
     private function getParameters(string $uri,array $position): array {
         $arrUri = explode('/', $uri);
         $parameters = [];
-        foreach($position as $pos => $name){
-            $parameters[$name] = $arrUri[$pos];
+        foreach($position as $pos){
+            $parameters[] = $arrUri[$pos];
         }
         return $parameters;
     }
@@ -39,11 +39,10 @@ class Router
                 $parameters = $this->getParameters($uri, $path['paramPosition']);
                 var_dump($parameters);
                 if(file_exists($controllerFile)){
-                    include_once($controllerFile);
-                    
+                    include_once($controllerFile);                    
                 }
                 $controllerObject = new $controllerName;
-                $result = $controllerObject -> $actionName();
+                $result = $controllerObject -> $actionName(...$parameters);
                 if ($result != null){
                     break;
                 }

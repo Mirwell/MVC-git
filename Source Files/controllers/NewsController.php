@@ -8,9 +8,9 @@ class NewsController
         return true;
     }
 
-    public function actionView()
+    public function actionView($number)
     {
-        echo 'NewsController actionView Просмотр одной новости';
+        echo "NewsController actionView Просмотр одной новости {$number}";
         return true;
     }
 
