@@ -9,11 +9,20 @@ class Router
        $this->routes = include($routesPath);
     } 
 
-    private function getURI()
+    private function getURI(): string
     {
         if(!empty($_SERVER['REQUEST_URI'])){
             return trim($_SERVER['REQUEST_URI'],'/');
         }
+    }
+
+    private function getParameters(string $uri,array $position): array {
+        $arrUri = explode('/', $uri);
+        $parameters = [];
+        foreach($position as $pos){
+            $parameters[$pos] = $arrUri[$pos];
+        }
+        return $parameters;
     }
     
     public function run()
@@ -27,6 +36,10 @@ class Router
                 $controllerName = $path['controller'];
                 $actionName = $path['action'];
                 $controllerFile = ROOT . '/controllers/' . $path['controller'] . '.php';
+                
+
+                $parameters = $this->getParameters($uri, $path['paramPosition']);
+                var_dump($parameters);
                 if(file_exists($controllerFile)){
                     include_once($controllerFile);
                     
